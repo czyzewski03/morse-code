@@ -3,6 +3,13 @@ def encode(in_message):
     out_message = [MORSE_CODE_DICTIONARY[char] for char in in_message.upper()]
     return ' '.join(out_message)
 
+def decode(in_message):
+    """Converts a message from Morse code."""
+    MC_DICT_INVERTED = {value: key for key, value in MORSE_CODE_DICTIONARY.items()}
+    in_message = in_message.split(' ')
+    out_message = [MC_DICT_INVERTED[char] for char in in_message]
+    return ''.join(out_message)
+
 
 MORSE_CODE_DICTIONARY = {
     'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
