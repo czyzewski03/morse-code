@@ -1,3 +1,5 @@
+import sys
+
 def encode(in_message):
     """Converts a message to Morse code."""
     out_message = [MORSE_CODE_DICTIONARY[char] for char in in_message.upper()]
@@ -19,3 +21,13 @@ MORSE_CODE_DICTIONARY = {
     'Y': '-.--', 'Z': '--..',
     ' ': '/',
 }
+
+if len(sys.argv) < 3:
+    sys.exit()
+command = sys.argv[1].lower()
+message = ' '.join(sys.argv[2:])
+
+if command == 'encode':
+    print(encode(message))
+elif command == 'decode':
+    print(decode(message))
