@@ -1,19 +1,21 @@
+#!/usr/bin/env python3
+
 import sys
+import argparse
 
 def encode(in_message):
     """Converts a message to Morse code."""
-    out_message = [MORSE_CODE_DICTIONARY[char] for char in in_message.upper()]
+    out_message = [TEXT_TO_MORSE[char] for char in in_message.upper() if char in TEXT_TO_MORSE.keys()]
     return ' '.join(out_message)
 
 def decode(in_message):
     """Converts a message from Morse code."""
-    MC_DICT_INVERTED = {value: key for key, value in MORSE_CODE_DICTIONARY.items()}
     in_message = in_message.split(' ')
-    out_message = [MC_DICT_INVERTED[char] for char in in_message]
+    out_message = [MORSE_TO_TEXT[char] for char in in_message if char in MORSE_TO_TEXT.keys()]
     return ''.join(out_message)
 
 
-MORSE_CODE_DICTIONARY = {
+TEXT_TO_MORSE = {
     'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
     'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
     'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
@@ -21,13 +23,18 @@ MORSE_CODE_DICTIONARY = {
     'Y': '-.--', 'Z': '--..',
     ' ': '/',
 }
+MORSE_TO_TEXT = {value: key for key, value in TEXT_TO_MORSE.items()}
 
-if len(sys.argv) < 3:
-    sys.exit()
-command = sys.argv[1].lower()
-message = ' '.join(sys.argv[2:])
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', '--input', dest='input', help='input', required=True)
+parser.add_argument('-m', '--mode', dest='mode', help='mode (encode/decode)', required=True)
+args = parser.parse_args()
 
-if command == 'encode':
-    print(encode(message))
-elif command == 'decode':
-    print(decode(message))
+if args.mode.lower() in ('encode', 'e'):
+    output = encode(args.input)
+elif args.mode.lower() in ('decode', 'd'):
+    output = decode(args.input)
+else:
+    parser.error("argument -m/--mode: expected 'encode' or 'decode'")
+
+print(output)
